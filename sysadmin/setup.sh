@@ -37,9 +37,9 @@ mysql -uroot -proot -e "CREATE DATABASE songapp"
 mysql -uroot -proot -e "grant all privileges on songapp.* to 'root'@'localhost' identified by 'root'"
 
 #apache setup
-sudo  rm /etc/apache2/sites-enabled/*
-sudo  cd /etc/apache2/sites-available/
-sudo  cp /var/www/sysadmin/apache/wordpress.config 001-wordpress.conf
-sudo  cd ../sites-enabled/
-sudo  ln -s ../sites-available/001-wordpressl.conf .
-sudo  service apache2 restart
+rm /etc/apache2/sites-enabled/*
+cd /etc/apache2/sites-available/
+cp /var/www/sysadmin/apache/wordpress.config 001-wordpress.conf
+cd ../sites-enabled/
+ln -s ../sites-available/001-wordpress.conf .
+service apache2 restart
