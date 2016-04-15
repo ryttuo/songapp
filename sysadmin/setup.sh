@@ -20,6 +20,7 @@ sudo a2enmod rewrite
 sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php5/apache2/php.ini
 sed -i "s/display_errors = .*/display_errors = On/" /etc/php5/apache2/php.ini
 sed -i "s/disable_functions = .*/disable_functions = /" /etc/php5/cli/php.ini
+sed -i "/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride all/" /etc/apache2/apache2.conf 
 
 sudo service apache2 restart
 
@@ -35,6 +36,7 @@ sudo apt-get install -y vim
 #mysql config
 mysql -uroot -proot -e "CREATE DATABASE songapp"
 mysql -uroot -proot -e "grant all privileges on songapp.* to 'root'@'localhost' identified by 'root'"
+mysql -uroot -proot songapp < /var/www/database/songapp.sql
 
 #apache setup
 rm /etc/apache2/sites-enabled/*
