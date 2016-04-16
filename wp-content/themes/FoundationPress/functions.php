@@ -14,6 +14,21 @@
  * @since FoundationPress 1.0.0
  */
 
+function api_page_get_acf_fields( $object, $field_name, $request ) {
+
+	return get_fields( $object[ 'id' ] );
+}
+
+add_action( 'rest_api_init', function() {
+
+	register_api_field( 'post', // the post-type
+		'acf-fields', // the key in the JSON result
+		array(
+			'get_callback'    => 'api_page_get_acf_fields',
+		)
+	);
+});
+
 /** Various clean up functions */
 require_once( 'library/cleanup.php' );
 

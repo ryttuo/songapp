@@ -9,23 +9,37 @@
     */
 
 
-add_filter('json_api_encode', 'json_api_encode_acf');
-
-function json_api_encode_acf($response) 
-{
-    if (isset($response['posts'])) {
-        foreach ($response['posts'] as $post) {
-            json_api_add_acf($post); // Add specs to each post
-        }
-    } 
-    else if (isset($response['post'])) {
-        json_api_add_acf($response['post']); // Add a specs property
-    }
-
-    return $response;
+function register_post_custom_field() {
+    register_api_field( 'post',
+        'custom_field',
+        array(
+            'get_callback'    => 'get_custom_field',
+            'update_callback' => null,
+            'schema'          => null,
+        )
+    );
 }
 
-function json_api_add_acf(&$post) 
-{
-    $post->acf = get_fields($post->id);
+function get_custom_field( $object, $field_name, $request ) {
+    return get_post_meta( $object[ 'id' ], $field_name, true );
+}
+
+add_action( 'rest_api_init', function () {
+        register_rest_route( 'myplugin/v1', '/author/(?P\d+)', array(
+            'methods' => 'GET',
+            'callback' => 'get_post_title_by_author'
+        ) );
+} );
+        
+        
+function get_post_title_by_author( $data ) {
+    $posts = get_posts( array(
+        'author' => $data['id'],
+    ) );
+
+    if ( empty( $posts ) ) {
+        return null;
+    }
+
+    return $posts[0]->post_title;
 }
